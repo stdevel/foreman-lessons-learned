@@ -1,0 +1,11 @@
+---
+# firewall settings
+foreman_firewall_services:
+  - service: ssh
+    state: enabled
+  - service: http
+    state: enabled
+  - service: https
+    state: enabled
+  - service: RH-Satellite-6
+    state: enabled

@@ -1,0 +1,29 @@
+---
+- name: Create a volume group for Foreman
+  community.general.lvg:
+    vg: "{{ foreman_vg }}"
+    pvs: "{{ foreman_pv }}"
+  become: true
+
+- name: Create logical volumes, file systems and mount points
+  become: true
+  block:
+    - name: Create logical volumes
+      community.general.lvol:
+        vg: "{{ foreman_vg }}"
+        lv: "{{ item.name }}"
+        size: "{{ item.size }}"
+      loop: "{{ foreman_filesystems }}"
+    - name: Create file systems
+      community.general.filesystem:
+        fstype: "{{ item.type }}"
+        dev: "/dev/mapper/{{ foreman_vg }}-{{ item.name }}"
+      loop: "{{ foreman_filesystems }}"
+    - name: Create mount points
+      ansible.posix.mount:
+        path: "{{ item.mountpoint }}"
+        src: "/dev/mapper/{{ foreman_vg }}-{{ item.name }}"
+        fstype: "{{ item.type }}"
+        opts: auto
+        state: mounted
+      loop: "{{ foreman_filesystems }}"

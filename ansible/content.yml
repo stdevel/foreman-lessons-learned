@@ -1,0 +1,117 @@
+---
+- name: Install requirements
+  ansible.builtin.dnf:
+    name:
+      - python3-requests
+
+- name: Create content credentials
+  theforeman.foreman.content_credential:
+    username: "{{ foreman_admin_username }}"
+    password: "{{ foreman_admin_password }}"
+    server_url: "https://{{ ansible_fqdn }}"
+    name: "{{ item.name }}"
+    content_type: gpg_key
+    organization: "{{ foreman_org }}"
+    content: "{{ lookup('url', item.url, split_lines=false) }}"
+  become: false
+  loop: "{{ foreman_content_credentials }}"
+
+- name: Create sync plans
+  theforeman.foreman.sync_plan:
+    server_url: "https://{{ ansible_fqdn }}"
+    username: "{{ foreman_admin_username }}"
+    password: "{{ foreman_admin_password }}"
+    name: "{{ item.name }}"
+    enabled: true
+    interval: "{{ item.interval }}"
+    sync_date: "{{ item.sync_date }}"
+    organization: "{{ foreman_org }}"
+  become: false
+  loop: "{{ foreman_syncplans }}"
+
+- name: Create products
+  theforeman.foreman.product:
+    username: "{{ foreman_admin_username }}"
+    password: "{{ foreman_admin_password }}"
+    server_url: "https://{{ ansible_fqdn }}"
+    name: "{{ item.name }}"
+    organization: "{{ foreman_org }}"
+    sync_plan: "{{ item.sync_plan }}"
+    gpg_key: "{{ item.gpg_key | default(omit) }}"
+  become: false
+  loop: "{{ foreman_products }}"
+
+- name: Create repositories
+  theforeman.foreman.repository:
+    username: "{{ foreman_admin_username }}"
+    password: "{{ foreman_admin_password }}"
+    server_url: "https://{{ ansible_fqdn }}"
+    name: "{{ item.name }}"
+    state: present
+    content_type: "{{ item.content_type | default('yum') }}"
+    product: "{{ item.product }}"
+    organization: "{{ foreman_org }}"
+    url: "{{ item.url }}"
+    download_policy: "{{ item.download_policy | default('on_demand') }}"
+  become: false
+  loop: "{{ foreman_repositories }}"
+
+- name: Sync products
+  theforeman.foreman.repository_sync:
+    server_url: "https://{{ ansible_fqdn }}"
+    username: "{{ foreman_admin_username }}"
+    password: "{{ foreman_admin_password }}"
+    product: "{{ item.name }}"
+    organization: "{{ foreman_org }}"
+  loop: "{{ foreman_products }}"
+  become: false
+  tags: sync
+
+- name: Create content views
+  theforeman.foreman.content_view:
+    username: "{{ foreman_admin_username }}"
+    password: "{{ foreman_admin_password }}"
+    server_url: "https://{{ ansible_fqdn }}"
+    name: "{{ item.name }}"
+    organization: "{{ foreman_org }}"
+    repositories: "{{ item.repositories }}"
+  become: false
+  loop: "{{ foreman_content_views }}"
+
+- name: Create lifecycle environments
+  theforeman.foreman.lifecycle_environment:
+    server_url: "https://{{ ansible_fqdn }}"
+    username: "{{ foreman_admin_username }}"
+    password: "{{ foreman_admin_password }}"
+    name: "{{ item.name }}"
+    label: "{{ item.label }}"
+    organization: "{{ foreman_org }}"
+    prior: "{{ item.prior | default('Library') }}"
+    description: "{{ item.description }}"
+  become: false
+  loop: "{{ foreman_lifecycle_environments }}"
+
+- name: Publish content view versions
+  theforeman.foreman.content_view_version:
+    server_url: "https://{{ ansible_fqdn }}"
+    username: "{{ foreman_admin_username }}"
+    password: "{{ foreman_admin_password }}"
+    content_view: "{{ item.name }}"
+    organization: "{{ foreman_org }}"
+    version: "{{ item.version }}"
+    lifecycle_environments: "{{ item.lifecycle_environments | list }}"
+  become: false
+  loop: "{{ foreman_content_view_versions }}"
+
+- name: Create activation keys
+  theforeman.foreman.activation_key:
+    server_url: "https://{{ ansible_fqdn }}"
+    username: "{{ foreman_admin_username }}"
+    password: "{{ foreman_admin_password }}"
+    name: "{{ item.name }}"
+    organization: "{{ foreman_org }}"
+    lifecycle_environment: "{{ item.lifecycle_environment }}"
+    content_view: "{{ item.content_view }}"
+    auto_attach: true
+  become: false
+  loop: "{{ foreman_activation_keys }}"

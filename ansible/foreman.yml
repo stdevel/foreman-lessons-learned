@@ -1,0 +1,58 @@
+---
+- name: Prepare systems
+  hosts: all
+  become: true
+  tasks:
+    - name: Set /etc/hosts
+      ansible.builtin.template:
+        src: templates/hosts.j2
+        dest: /etc/hosts
+        mode: '0644'
+        owner: root
+        group: root
+
+- name: Install Foreman/Katello
+  hosts: foreman
+  become: true
+  pre_tasks:
+    - name: Import storage tasks
+      ansible.builtin.import_tasks: storage.yml
+      tags: storage
+
+    - name: Import software tasks
+      ansible.builtin.import_tasks: software.yml
+      tags: software
+
+  roles:
+    - role: fedora.linux_system_roles.firewall
+      firewall: "{{ foreman_firewall_services }}"
+
+    - role: theforeman.operations.foreman_repositories
+      foreman_repositories_version: "3.7"
+      foreman_repositories_katello_version: "4.9"
+
+    - role: theforeman.operations.puppet_repositories
+      foreman_puppet_repositories_version: 7
+
+    - role: theforeman.operations.installer
+      foreman_installer_package: foreman-installer-katello
+      foreman_installer_scenario: katello
+      foreman_installer_timeout: 6000
+      foreman_installer_options:
+        - '--foreman-initial-organization "{{ foreman_org }}"'
+        - '--foreman-initial-admin-username "{{ foreman_admin_username }}"'
+        - '--foreman-initial-admin-password "{{ foreman_admin_password }}"'
+
+  post_tasks:
+    - name: Set display language
+      theforeman.foreman.user:
+        username: "{{ foreman_admin_username }}"
+        password: "{{ foreman_admin_password }}"
+        server_url: "https://{{ ansible_fqdn }}"
+        name: "{{ foreman_admin_username }}"
+        locale: en
+      become: false
+
+    - name: Import content tasks
+      ansible.builtin.import_tasks: content.yml
+      tags: content

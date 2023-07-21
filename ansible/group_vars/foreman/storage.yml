@@ -1,0 +1,17 @@
+---
+# storage settings
+foreman_vg: vg_data
+foreman_pv: /dev/vdb
+foreman_filesystems:
+  - name: lv_pgsql
+    type: xfs
+    mountpoint: /var/lib/pgsql
+    size: 20480
+  - name: lv_pulp
+    type: xfs
+    mountpoint: /var/lib/pulp
+    size: 20480 # should be 300G
+  - name: lv_qpidd
+    mountpoint: /var/lib/qpidd
+    type: xfs
+    size: 1024 # ~2MB per content host

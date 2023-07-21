@@ -1,0 +1,56 @@
+---
+foreman_org: Shitty Robots
+
+foreman_content_credentials:
+  - name: RPM-GPG-KEY-CentOS-Official
+    url: https://centos.org/keys/RPM-GPG-KEY-CentOS-Official
+
+foreman_syncplans:
+  - name: daily-sync
+    interval: daily
+    sync_date: "2023-01-01 04:00:00 UTC"
+
+foreman_products:
+  - name: CentOS Stream 9 x86_64
+    sync_plan: daily-sync
+    gpg_key: RPM-GPG-KEY-CentOS-Official
+
+foreman_repositories:
+  - name: BaseOS_x86_64
+    product: CentOS Stream 9 x86_64
+    url: https://mirror.stream.centos.org/9-stream/BaseOS/x86_64/os/
+  - name: AppStream_x86_64
+    product: CentOS Stream 9 x86_64
+    url: https://mirror.stream.centos.org/9-stream/AppStream/x86_64/os/
+
+foreman_content_views:
+  - name: CentOS Stream 9 x86_64
+    repositories:
+      - name: BaseOS_x86_64
+        product: CentOS Stream 9 x86_64
+      - name: AppStream_x86_64
+        product: CentOS Stream 9 x86_64
+
+foreman_lifecycle_environments:
+  - name: Development
+    label: dev
+    description: Development systems
+  - name: QA
+    label: qa
+    prior: Development
+    description: QA systems
+  - name: Production
+    label: prod
+    prior: QA
+    description: Production systems
+
+foreman_content_view_versions:
+  - name: CentOS Stream 9 x86_64
+    version: '1.0'
+    lifecycle_environments:
+      - Development
+
+foreman_activation_keys:
+  - name: ak-centos9s
+    lifecycle_environment: Development
+    content_view: 'CentOS Stream 9 x86_64'
