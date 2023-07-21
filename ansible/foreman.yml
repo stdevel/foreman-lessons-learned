@@ -44,15 +44,6 @@
         - '--foreman-initial-admin-password "{{ foreman_admin_password }}"'
 
   post_tasks:
-    - name: Set display language
-      theforeman.foreman.user:
-        username: "{{ foreman_admin_username }}"
-        password: "{{ foreman_admin_password }}"
-        server_url: "https://{{ ansible_fqdn }}"
-        name: "{{ foreman_admin_username }}"
-        locale: en
-      become: false
-
     - name: Import content tasks
       ansible.builtin.import_tasks: content.yml
       tags: content
