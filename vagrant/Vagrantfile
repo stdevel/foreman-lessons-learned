@@ -1,0 +1,85 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+Vagrant.configure("2") do |config|
+  second_disk = './second_disk.vdi'
+  # Workaround for libvirt
+  config.vm.provider :libvirt do |libvirt|
+    libvirt.qemu_use_session = false
+    # if the above doesn't work, try uncommenting the following instead
+    # libvirt.uri = 'qemu:///system'
+  end
+
+  # box name and version
+  box_name = "generic/centos8s"
+  box_version = "~> 4.2"
+
+  # deploy Foreman VM
+  config.vm.define "foreman" do |foreman|
+    foreman.vm.hostname = "00-foreman.sva.de"
+    # define box
+    foreman.vm.box = box_name
+    foreman.vm.box_version = box_version
+    # rsync
+    config.vm.synced_folder "../ansible", "/vagrant", type: "rsync"
+    # forward some ports
+    foreman.vm.network "forwarded_port", guest: 80, host: 8080   # http
+    foreman.vm.network "forwarded_port", guest: 443, host: 8443  # https
+    # define additional private client network
+    foreman.vm.network "private_network", ip: "192.168.23.100"
+    # set CPU, memory and second disk
+    foreman.vm.provider "virtualbox" do |vb|
+      # customize hardware
+      vb.cpus = "4"
+      vb.memory = "20480"
+      # add second disk
+      unless File.exist?(second_disk)
+        vb.customize ['createhd', '--filename', second_disk, '--variant', 'Standard', '--size', 130 * 1024, '--format', 'VMDK']
+      end
+      vb.customize ['storageattach', :id,  '--storagectl', 'IDE Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', second_disk]
+    end
+    foreman.vm.provider "libvirt" do |libvirt|
+      libvirt.cpus = "4"
+      libvirt.memory = "20480"
+      # add second disk
+      libvirt.storage :file, :size => '130G', :bus => 'virtio'
+    end
+    # install foreman packages
+    foreman.vm.provision "ansible_local" do |ansible|
+      ansible.playbook = "foreman.yml"
+      ansible.galaxy_role_file = '/vagrant/requirements.yml'
+      ansible.galaxy_roles_path = '/etc/ansible/roles'
+      ansible.galaxy_command = 'sudo ansible-galaxy collection install -r %{role_file} -p /usr/share/ansible/collections ; sudo ansible-galaxy role install -r %{role_file} --roles-path=%{roles_path}'
+      ansible.inventory_path = "vagrant-inventory.ini"
+    end
+  end
+
+  # deploy Client VM
+  config.vm.define "client" do |client|
+    client.vm.hostname = "00-client.sva.de"
+    # define box
+    client.vm.box = box_name
+    client.vm.box_version = box_version
+    # rsync
+    config.vm.synced_folder "../ansible", "/vagrant", type: "rsync"
+    # forward some ports
+    client.vm.network "forwarded_port", guest: 80, host: 8081   # http
+    # define additional private client network
+    client.vm.network "private_network", ip: "192.168.23.101"
+      client.vm.provider "virtualbox" do |vb|
+        # customize hardware
+        vb.memory = "1024"
+      end
+      client.vm.provider "libvirt" do |libvirt|
+        # customize hardware
+        libvirt.memory = "1024"
+      end
+    # prepare client
+    client.vm.provision "ansible_local" do |ansible|
+      ansible.playbook = "foreman.yml"
+      ansible.galaxy_role_file = '/vagrant/requirements.yml'
+      ansible.galaxy_roles_path = '/etc/ansible/roles'
+      ansible.galaxy_command = 'sudo ansible-galaxy collection install -r %{role_file} -p /usr/share/ansible/collections ; sudo ansible-galaxy role install -r %{role_file} --roles-path=%{roles_path}'
+    end
+  end
+
+end
