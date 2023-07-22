@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
     foreman.vm.box = box_name
     foreman.vm.box_version = box_version
     # rsync
-    config.vm.synced_folder "../ansible", "/vagrant", type: "rsync"
+    config.vm.synced_folder "../documentation/Asciidoc/code", "/vagrant", type: "rsync"
     # forward some ports
     foreman.vm.network "forwarded_port", guest: 80, host: 8080   # http
     foreman.vm.network "forwarded_port", guest: 443, host: 8443  # https
@@ -60,7 +60,7 @@ Vagrant.configure("2") do |config|
     client.vm.box = box_name
     client.vm.box_version = box_version
     # rsync
-    config.vm.synced_folder "../ansible", "/vagrant", type: "rsync"
+    config.vm.synced_folder "../documentation/Asciidoc/code", "/vagrant", type: "rsync"
     # forward some ports
     client.vm.network "forwarded_port", guest: 80, host: 8081   # http
     # define additional private client network

@@ -10,6 +10,12 @@ Rename/copy the [`host_vars/00-foreman.sva.de`](host_vars/00-foreman.sva.de) dir
 
 If needed, edit [`group_vars/foreman/foreman.yml`](group_vars/foreman/foreman.yml) and [`group_vars/foreman/storage.yml`](group_vars/foreman/storage.yml) to define software content to synchronize and storage devices to use.
 
+Install Ansible requirements:
+
+```command
+$ ansible-galaxy collection install -r requirements.yml
+```
+
 Run the playbook:
 
 ```command
