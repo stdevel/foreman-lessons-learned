@@ -4,6 +4,8 @@ foreman_org: Shitty Robots
 foreman_content_credentials:
   - name: RPM-GPG-KEY-CentOS-Official
     url: https://centos.org/keys/RPM-GPG-KEY-CentOS-Official
+  - name: RPM-GPG-KEY-foreman
+    url: http://yum.theforeman.org/RPM-GPG-KEY-foreman
 
 foreman_syncplans:
   - name: daily-sync
@@ -14,6 +16,9 @@ foreman_products:
   - name: CentOS Stream 9 x86_64
     sync_plan: daily-sync
     gpg_key: RPM-GPG-KEY-CentOS-Official
+  - name: Foreman Client EL9 x86_64
+    sync_plan: daily-sync
+    gpg_key: RPM-GPG-KEY-foreman
 
 foreman_repositories:
   - name: BaseOS_x86_64
@@ -22,6 +27,9 @@ foreman_repositories:
   - name: AppStream_x86_64
     product: CentOS Stream 9 x86_64
     url: https://mirror.stream.centos.org/9-stream/AppStream/x86_64/os/
+  - name: ForemanClient_EL9_x86_64
+    product: Foreman Client EL9 x86_64
+    url: http://yum.theforeman.org/client/latest/el9/x86_64/
 
 foreman_content_views:
   - name: CentOS Stream 9 x86_64
@@ -30,6 +38,18 @@ foreman_content_views:
         product: CentOS Stream 9 x86_64
       - name: AppStream_x86_64
         product: CentOS Stream 9 x86_64
+  - name: Foreman Client EL9 x86_64
+    repositories:
+      - name: ForemanClient_EL9_x86_64
+        product: Foreman Client EL9 x86_64
+  - name: CentOS Stream 9 x86_64 + Tools
+    composite: true
+    auto_publish: true
+    components:
+      - content_view: CentOS Stream 9 x86_64
+        latest: true
+      - content_view: Foreman Client EL9 x86_64
+        latest: true
 
 foreman_lifecycle_environments:
   - name: Development
@@ -46,6 +66,10 @@ foreman_lifecycle_environments:
 
 foreman_content_view_versions:
   - name: CentOS Stream 9 x86_64
+    version: '1.0'
+    lifecycle_environments:
+      - Development
+  - name: Foreman Client EL9 x86_64
     version: '1.0'
     lifecycle_environments:
       - Development

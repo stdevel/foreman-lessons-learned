@@ -74,7 +74,10 @@
     server_url: "https://{{ ansible_fqdn }}"
     name: "{{ item.name }}"
     organization: "{{ foreman_org }}"
-    repositories: "{{ item.repositories }}"
+    repositories: "{{ item.repositories | default(omit) }}"
+    composite: "{{ item.composite | default(omit) }}"
+    auto_publish: "{{ item.auto_publish | default(omit) }}"
+    components: "{{ item.components | default(omit) }}"
   become: false
   loop: "{{ foreman_content_views }}"
 
