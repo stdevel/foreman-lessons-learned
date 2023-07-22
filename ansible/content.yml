@@ -103,6 +103,19 @@
   become: false
   loop: "{{ foreman_content_view_versions }}"
 
+- name: Create hostgroups
+  theforeman.foreman.hostgroup:
+    server_url: "https://{{ ansible_fqdn }}"
+    username: "{{ foreman_admin_username }}"
+    password: "{{ foreman_admin_password }}"
+    name: "{{ item.name }}"
+    organization: "{{ foreman_org }}"
+    lifecycle_environment: "{{ item.lifecycle_environment | default(omit) }}"
+    content_view: "{{ item.content_view | default(omit) }}"
+    parameters: "{{ item.parameters | default(omit) }}"
+  become: false
+  loop: "{{ foreman_hostgroups }}"
+
 - name: Create activation keys
   theforeman.foreman.activation_key:
     server_url: "https://{{ ansible_fqdn }}"

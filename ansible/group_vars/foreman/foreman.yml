@@ -54,3 +54,6 @@ foreman_activation_keys:
   - name: ak-centos9s
     lifecycle_environment: Development
     content_view: 'CentOS Stream 9 x86_64'
+
+foreman_hostgroups:
+  - name: centos-9s
