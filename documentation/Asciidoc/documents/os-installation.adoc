@@ -1,0 +1,67 @@
+= Operating system installation
+
+*CentOS Stream 8 x86_64* was installed using the http://isoredirect.centos.org/centos/8-stream/isos/x86_64/[ISO image].
+
+== Partitioning
+
+.Main instance partitioning
+[cols="1,2,2,1,2"]
+|===
+| Disc | Volume group | Mount point | Size | Description
+
+.6+| `/dev/sda` .6+| `vg_system` | `/` | 10 GB | Root filesystem
+| `/var` | 10 GB | Variable data
+| `/opt` | 1 GB | Third-party software
+| `swap` | 9 GB | Swap partition
+| `/tmp` | 4 GB | Temporary files
+| `/home` | 10 GB | User home directories
+
+.3+| `/dev/sdb` .3+| `vg_foreman` | `/var/lib/pgsql` | 20 GB | Foreman database (_PostgreSQL_)
+| `/var/lib/pulp` | 300 GB | Package storage
+| `/var/lib/qpidd` | 1 GB | Cache
+|===
+
+NOTE: The recommended *xfs* was used as file system.
+
+== Customization
+
+The following parameters were defined during installation:
+
+.Installation parameter
+[cols="1,1"]
+|===
+| Language | Englisch / Englisch (United States)
+| Keyboard layout | German (no dead keys)
+| Region / City | Europe / Berlin
+| Base Environment | Minimal Install
+|===
+
+.Netzwerk parameter
+[cols="1,1",subs="attributes"]
+|===
+| Network interface | `{foreman_nic}`
+| Hostname / FQDN | `{foreman_hostname}` / `{foreman_fqdn}`
+| IP address | `{foreman_ip}`
+| Network mask | `{foreman_netmask}`
+| Gateway | `{foreman_gateway}`
+| DNS server | `{foreman_dns1}`, `{foreman_dns2}`
+| Search domains | `{foreman_search_domain}`
+| Require IPv4 addressing for this connection to complete | *yes*
+| NTP server | `{foreman_ntp}`
+|===
+
+.User
+[cols="1,1"]
+|===
+| Full name | `Administrator`
+| User name | `administrator`
+| Require a password to use this account | *yes*
+|===
+
+.DNS validation
+[shell,subs="attributes"]
+----
+# hostnamectl set-hostname {foreman_hostname}
+# nslookup {foreman_ip}
+# nslookup {foreman_fqdn}
+----

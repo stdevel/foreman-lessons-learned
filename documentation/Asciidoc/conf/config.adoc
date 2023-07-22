@@ -1,0 +1,33 @@
+// asciidoc settings for EN (english)
+// ==================================
+// toc-title definition MUST follow document title without blank line!
+
+
+// enable table-of-contents
+:experimental:
+:icons: font
+:doctype: book
+
+// :pdf-stylesdir: stylesheets/
+// :pdf-fontsdir: stylesheets/ttf/
+:pdf-theme: en
+// :title-page:
+:toc:
+:toclevels: 4
+
+// Default Syntax Highlighter
+:source-highlighter: rouge
+
+
+:icons: font
+
+
+// where are images located?
+:imagesdir: ../assets
+
+// inline images
+// results in a single file html output
+// but does not work with publish2confluence
+// and htmlSanityChecker
+//:data-uri:
+//:icons: font

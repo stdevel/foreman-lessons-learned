@@ -1,0 +1,100 @@
+= Customization
+
+== Backup
+
+NOTE: This section is still missing (TODO)
+
+== Settings
+
+The following configuration parameters were set:
+
+[cols="1,1,3"]
+|===
+| Setting | Value | Description
+
+| `default_download_policy` | `on_demand` | Default download policy; `on_demand` saves disk space and network bandwidth by only downloading metadata in full. The actual packages are downloaded only when they are first used.
+|===
+
+== Organizations and locations
+
+The following organizations and locations were created:
+
+.Organizations and locations
+[cols="1,1,2"]
+|===
+| Organization | Location | Description
+
+| Shitty Robots | Default Location | Main organization unit
+|===
+
+== Third-party products
+
+The following third-party products were configured:
+
+* CentOS Stream 9 x86_64
+
+NOTE: Product-related definitions are part of the *appendix*.
+
+== Content Views
+
+The following CVs were configured:
+
+.CV overview
+[cols="1,1"]
+|===
+| Name | Repositories
+
+| `CentOS 9 x86_64` | `Base_x86_64`, `AppStream_x86_64`, `ForemanClient_EL9_x86_64`
+| `Foreman Client EL9 x86_64` | `ForemanClient_EL9_x86_64`
+|===
+
+NOTE: CV-related definitions are part of the *appendix*.
+
+== Lifecycle Environments
+
+A **Lifecycle Environment Path** with the following environments was created:
+
+* Development
+* QA
+* Production
+
+NOTE: No application-specific Lifecycle Environment Paths were defined.
+
+== Activation Keys
+
+The following activation keys were created:
+
+.Activation Key overview
+[cols="1,1,1"]
+|===
+| Name | Content View | Lifecycle Environment
+
+| `ak-centos9s` | CentOS 9 Stream x86_64 | Development
+|===
+
+NOTE: *Auto-Attach* and *Simple Content Access* are used.
+
+== Sync Plans
+
+The following Sync Plans were created:
+
+.Sync Plan overview
+[cols="1,1,1"]
+|===
+| Name | Products | Time
+
+| `daily` | CentOS 9, Foreman Client EL9 x86_64 | daily, 04:00 UTC
+|===
+
+
+== Hostgroups
+
+The following hostgroups were created:
+
+.Hostgroup overview
+[cols="1,1"]
+|===
+| Name | Nested
+
+| `centos-9s` | no
+|===

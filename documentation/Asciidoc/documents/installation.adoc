@@ -1,0 +1,54 @@
+= Installation
+
+Installation took place on *06.03.2023* when *Foreman 3.7* and *Katello 4.9* were the most recent versions.
+
+== Preparation
+
+NOTE: The installation was execution in accordance with the https://docs.theforeman.org/3.7/Installing_Server/index-katello.html[project documentation].
+
+.Updating the system
+[shell]
+----
+# dnf update
+# reboot
+----
+
+== Ansible
+
+As Ansible was used for the installation, Ansible needed to be installed:
+
+.Installing Ansible
+[shell]
+----
+# dnf install ansible-core
+----
+
+For the installation an *Inventory* and additional *variables* were created:
+
+[source,ini]
+.lab-inventory.ini
+----
+include::../code/lab-inventory.ini[]
+----
+
+[source,yml]
+.group_vars/foreman/foreman.yml
+----
+include::../code/group_vars/foreman/foreman.yml[]
+----
+
+[source,yml]
+.group_vars/foreman/firewall.yml
+----
+include::../code/group_vars/foreman/firewall.yml[]
+----
+
+[source,yml]
+.group_vars/foreman/storage.yml
+----
+include::../code/group_vars/foreman/storage.yml[]
+----
+
+The complete source code is added to the *appendix* of this document.
+
+IMPORTANT: Credentials are not part of the appendix as they need to created in the `host_vars/{foreman_fqdn}/credentials.yml` file.

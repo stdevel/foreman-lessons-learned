@@ -1,0 +1,23 @@
+= Scenario
+
+image::scenario.jpg[Scenario]
+
+This scenario consists of a Foreman **main instance** in the **XYZ** datacenter. It will be used to manage approximately **20 servers**.
+
+== VM configuration
+
+The VM was created with the following parameters:
+
+.VM configuration main instance
+[cols="1,1"]
+|===
+| Setting | Value
+
+| vCPU | 8
+| Memory  | 32 GB
+| OS HDD/controller | 100 GB (_SCSI-ID 0:0_)
+| Data HDD/controller | 500 GB (_SCSI-ID 1:0_)
+| Storage provisioning | Thin Provision
+| SCSI controller | VMware Paravirtual
+| Network adapter #1 | Lab network
+|===

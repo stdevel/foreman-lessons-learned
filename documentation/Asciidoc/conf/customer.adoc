@@ -1,0 +1,23 @@
+// customer information
+:author: Simone Giertz <s.giertz@shittyrobots.loc>
+:project_name: Foreman installation
+:date: 09.07.2023
+:document_version: 1.0
+:customercompany: ACME Ltd.
+:customercompany_sub: IT
+:customername: Mr. Chad Badguy
+:customerstreet: Main St 1
+:customercity: 02120 Boston MA
+
+// Foreman information
+:foreman_hostname: linmgmt001
+:foreman_fqdn: linmgmt01.shittyrobots.loc
+:foreman_nic: ens192
+:foreman_ip: 10.10.22.42
+:foreman_netmask: 255.255.255.0
+:foreman_gateway: 10.10.22.1
+:foreman_dns1: 10.10.22.1
+:foreman_dns2: 10.10.22.2
+:foreman_search_domain: shittyrobots.loc
+:foreman_ntp: 10.10.22.1
+:foreman_org: Shitty Robots

@@ -1,0 +1,46 @@
+= Appendix
+
+== Registering CentOS clients
+
+To register CentOS clients, it is sufficient to execute the following commands:
+
+.Registering a CentOS client
+[shell,subs="attributes"]
+----
+# yum localinstall https://{foreman_fqdn}/pub/katello-ca-consumer-latest.noarch.rpm
+# subscription-manager register --activationkey=ak-centos9s --org {foreman_org}
+----
+
+== Ansible source code
+
+This section contains the Ansible code to bootstrap the environment.
+
+[source,yml]
+.ansible/foreman.yml
+----
+include::../code/foreman.yml[]
+----
+
+[source,jinja]
+.ansible/templates/hosts.j2
+----
+include::../code/templates/hosts.j2[]
+----
+
+[source,yml]
+.ansible/storage.yml
+----
+include::../code/storage.yml[]
+----
+
+[source,yml]
+.ansible/software.yml
+----
+include::../code/software.yml[]
+----
+
+[source,yml]
+.ansible/content.yml
+----
+include::../code/content.yml[]
+----

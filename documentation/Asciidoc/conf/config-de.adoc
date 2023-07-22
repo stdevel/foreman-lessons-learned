@@ -1,0 +1,46 @@
+// asciidoc settings for DE (German)
+// ==================================
+// toc-title definition MUST follow document title without blank line!
+:toc-title: Inhaltsverzeichnis
+
+
+// enable table-of-contents
+:experimental:
+:icons: font
+:doctype: book
+:toc-title: Inhaltsverzeichnis
+// :pdf-stylesdir: stylesheets/
+// :pdf-fontsdir: stylesheets/ttf/
+:pdf-theme: sz
+// :title-page:
+:toc:
+:toclevels: 2
+
+// Default Syntax Highlighter
+:source-highlighter: rouge
+
+
+:icons: font
+// :icons: image
+//:icontype: svg
+
+// Beschreibungen
+:caution-caption: Achtung
+:important-caption: Wichtig
+:note-caption: Hinweis
+:tip-caption: Tip
+:warning-caption: Warnung
+:appendix-caption: Anhang
+:example-caption: Beispiel
+:figure-caption: Abbildung
+:table-caption: Tabelle
+
+// where are images located?
+:imagesdir: assets/
+
+// inline images
+// results in a single file html output
+// but does not work with publish2confluence
+// and htmlSanityChecker
+//:data-uri:
+//:icons: font

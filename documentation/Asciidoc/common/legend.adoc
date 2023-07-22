@@ -1,0 +1,11 @@
+= Legend
+
+CAUTION: **This might be important to know**
+
+IMPORTANT: **Important hint**
+
+NOTE: **An information hint**
+
+TIP: **A tip to make things easier**
+
+WARNING: **Please pay attention**

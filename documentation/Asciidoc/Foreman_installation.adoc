@@ -1,0 +1,25 @@
+// configure DE settings for asciidoc
+include::conf/config.adoc[]
+include::conf/customer.adoc[]
+
+= {project_name}
+:context: {project_nameID}
+
+include::common/company-info.adoc[]
+
+include::common/legend.adoc[leveloffset=1]
+
+include::documents/architecture.adoc[leveloffset=1]
+ifdef::backend-pdf[<<<]
+
+include::documents/os-installation.adoc[leveloffset=1]
+ifdef::backend-pdf[<<<]
+
+include::documents/installation.adoc[leveloffset=1]
+ifdef::backend-pdf[<<<]
+
+include::documents/customization.adoc[leveloffset=1]
+ifdef::backend-pdf[<<<]
+
+include::documents/appendix.adoc[leveloffset=1]
+ifdef::backend-pdf[<<<]
